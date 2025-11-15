@@ -1,5 +1,5 @@
 import { Mail, User2Icon,Lock } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import api from "../configs/api";
 import { useDispatch } from "react-redux";
 import { login } from "../app/features/authSlice";
@@ -15,6 +15,9 @@ const query = new URLSearchParams(window.location.search)
 const urlState=query.get('state')
 
   const [state, setState] = React.useState(urlState||"login");
+
+  const [message, setmessage] = useState("")
+  const [loading, setloading] = useState(false)
   
 
   const [formData, setFormData] = React.useState({
@@ -22,17 +25,30 @@ const urlState=query.get('state')
     email: "",
     password: "",
   });
+  
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setmessage("⚠️ Server is restarting... It may take 30–60 seconds.");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  setloading(true);
     try {
       const{data} = await api.post(`/api/users/${state}`,formData)
       dispatch(login(data))
       localStorage.setItem('token',data.token)
       toast.success(data.message)
+      setmessage("")
+      setloading(false)
     
     } catch (error) {
+          setloading(false)
+          setmessage("⚠️ Server is waking up... please wait a few seconds.")
      toast(error?.response?.data?.message || error.message)
     }
   };
@@ -41,6 +57,11 @@ const urlState=query.get('state')
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+ 
+
+
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-grey-50">
@@ -52,6 +73,13 @@ const urlState=query.get('state')
           {state === "login" ? "Login" : "Sign up"}
         </h1>
         <p className="text-gray-500 text-sm mt-2">Please {state} to continue</p>
+
+           {/* 🟡 SERVER MESSAGE */}
+        {message && (
+          <div className="mt-4 text-yellow-600 text-sm bg-yellow-100 p-2 rounded-lg">
+            {message}
+          </div>
+        )}
         {state !== "login" && (
           <div className="flex items-center mt-6 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
             
@@ -122,3 +150,5 @@ const urlState=query.get('state')
 };
 
 export default Login;
+
+
