@@ -51,6 +51,7 @@ const urlState=query.get('state')
           setmessage("⚠️ Server is waking up... please wait a few seconds.")
      toast(error?.response?.data?.message || error.message)
     }
+    
   };
 
   const handleChange = (e) => {
