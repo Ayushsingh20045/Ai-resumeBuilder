@@ -113,7 +113,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
       )}
 
       {/* Projects */}
-      {data.project && data.project.length > 0 && (
+      {data.projects && data.projects.length > 0 && (
         <section className="mb-6">
           <h2
             className="text-xl font-semibold mb-4"
@@ -123,7 +123,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
           </h2>
 
           <ul className="space-y-3 ">
-            {data.project.map((proj, index) => (
+            {data.projects.map((proj, index) => (
               <div
                 key={index}
                 className="flex justify-between items-start border-l-3 border-gray-300 pl-6"
