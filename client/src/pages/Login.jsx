@@ -30,7 +30,7 @@ const urlState=query.get('state')
   useEffect(() => {
     const timer = setTimeout(() => {
       setmessage("⚠️ Server is restarting... It may take 30–60 seconds.");
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
